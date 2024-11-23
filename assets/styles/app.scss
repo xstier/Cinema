@@ -21,7 +21,7 @@ input[type="file"]::file-selector-button {
   background: $btnColor;
   color: $btnText;
   border-radius: 25px;
-  width: 10rem;
+
   &:hover {
     cursor: pointer;
   }
@@ -68,6 +68,7 @@ table {
 form {
   display: flex;
   flex-flow: column nowrap;
+  width: auto;
 
   div {
     display: flex;
