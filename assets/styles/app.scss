@@ -1,0 +1,86 @@
+$btnColor: #333;
+$btnText: #ddd;
+$maincolor: rgb(37, 124, 158);
+$titleTableColor: #222;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: $maincolor;
+  justify-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: $btnText;
+}
+button,
+input[type="file"]::file-selector-button {
+  background: $btnColor;
+  color: $btnText;
+  border-radius: 25px;
+  width: 10rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+header {
+  width: 100vh;
+  nav {
+    ul {
+      list-style-type: none;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      li {
+        a {
+          font-size: larger;
+        }
+      }
+    }
+  }
+}
+
+input {
+  padding-bottom: 0.3rem;
+  margin: 0.3rem;
+}
+
+table {
+  thead,
+  th {
+    background: $titleTableColor;
+    color: $btnText;
+  }
+  tbody {
+    tr {
+      &:nth-child(even) {
+        background: $btnColor;
+        color: $btnText;
+      }
+    }
+  }
+}
+
+form {
+  display: flex;
+  flex-flow: column nowrap;
+
+  div {
+    display: flex;
+    flex-flow: row nowrap;
+    padding-bottom: 0.3rem;
+
+    input {
+      width: 50%;
+    }
+
+    label {
+      width: 50%;
+      text-align: left;
+    }
+  }
+}
