@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\FilmsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FilmsRepository::class)]
@@ -44,6 +45,9 @@ class Films
      */
     #[ORM\OneToMany(targetEntity: Seances::class, mappedBy: 'id_film')]
     private Collection $seances;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_sortie = null;
 
     public function __construct()
     {
@@ -139,6 +143,13 @@ class Films
         return $this;
     }
 
+    //emplacement des images
+
+    public function getAffichePath(): string
+    {
+        return $this->affiche ? '/affiches/' . $this->affiche : '/affiches/default.jpg';
+    }
+
     public function getDuree(): ?int
     {
         return $this->duree;
@@ -177,6 +188,18 @@ class Films
                 $seance->setIdFilm(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateSortie(): ?\DateTimeInterface
+    {
+        return $this->date_sortie;
+    }
+
+    public function setDateSortie(\DateTimeInterface $date_sortie): static
+    {
+        $this->date_sortie = $date_sortie;
 
         return $this;
     }

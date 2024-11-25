@@ -40,4 +40,16 @@ class FilmsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function LastRelease(): array
+    {
+        $lastWednesday = new \Datetime('last wednesday');
+
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.date_sortie = :lastWednesday')
+            ->setParameter('lastWednesday', $lastWednesday)
+            ->orderBy('f.date_sortie', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

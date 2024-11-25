@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/films')]
 final class FilmsController extends AbstractController
@@ -22,6 +23,7 @@ final class FilmsController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'app_films_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -30,10 +32,20 @@ final class FilmsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($film);
-            $entityManager->flush();
 
-            return $this->redirectToRoute('app_films_index', [], Response::HTTP_SEE_OTHER);
+            $afficheFile = $form->get('affiche')->getData();
+            if ($afficheFile) {
+                $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/affiches';
+                $newFilename = uniqid() . '.' . $afficheFile->guessExtension();
+                $afficheFile->move($uploadDirectory, $newFilename);
+
+                // Mise à jour de l'entité avec le nom de fichier
+                $film->setAffiche($newFilename);
+                $entityManager->persist($film);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_films_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('films/new.html.twig', [
@@ -71,7 +83,7 @@ final class FilmsController extends AbstractController
     #[Route('/{id}', name: 'app_films_delete', methods: ['POST'])]
     public function delete(Request $request, Films $film, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$film->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $film->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($film);
             $entityManager->flush();
         }

@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -14,21 +13,32 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RegistrationFormType extends AbstractType
 {
+    public function __construct(private Security $security) {}
+
+    public function role()
+    {
+        $user = $this->security->getUser();
+        $role = $this->security->isGranted("ROLE_ADMIN");
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class)
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+            // ->add('agreeTerms', CheckboxType::class, [
+            //     'mapped' => false,
+            //     'constraints' => [
+            //         new IsTrue([
+            //             'message' => 'You should agree to our terms.',
+            //         ]),
+            //     ],
+            // ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -43,9 +53,33 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
-                    ]),
+                    ])
+                ]
+            ]);
+
+
+
+
+
+        $formData = $options['data'];
+
+        $role = $this->role();
+
+
+        $builder
+            ->add('Roles', ChoiceType::class, [
+                'choices' =>
+                [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN',
+                    'Employe' => 'ROLE_EMPLOYE'
+
                 ],
-            ])
+                'data' => $formData->getRoles()[0] ?? null, // Pré-sélectionner le premier rôle, ou null si aucun
+
+            ]);
+
+        $builder
             ->add('pseudo', TextType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter your username'])
@@ -53,15 +87,15 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('nom', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your name'])
+                    new NotBlank(['message' => 'Please enter your surname'])
                 ]
             ])
             ->add('prenom', TextType::class, [
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your surname'])
+                    new NotBlank(['message' => 'Please enter your name'])
                 ]
             ])
-            ->add('register', ButtonType::class)
+            ->add('register', SubmitType::class)
 
         ;
     }

@@ -17,7 +17,12 @@
 	{{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
-	{{ form_row(registrationForm.agreeTerms) }}
+	{% if is_granted('ROLE_ADMIN') %}
+		{{ form_row(registrationForm.roles,json_encode)}}
+	{% endif %}
+
+
+	{#{{ form_row(registrationForm.agreeTerms) }}#}
 
 
 	{{ form_end(registrationForm) }}
