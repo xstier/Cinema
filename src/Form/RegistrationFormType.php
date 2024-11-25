@@ -16,7 +16,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RegistrationFormType extends AbstractType
 {
@@ -63,7 +62,7 @@ class RegistrationFormType extends AbstractType
 
         $formData = $options['data'];
 
-        $role = $this->role();
+
 
 
         $builder

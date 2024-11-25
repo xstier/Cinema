@@ -1,0 +1,28 @@
+<nav>
+	<ul>
+		<li>
+			<a href="/">Accueil</a>
+		</li>
+		<li>Contact</li>
+		{% if is_granted("ROLE_USER") %}
+			<li>Se Déconnecter</li>
+		{% else %}
+			<li>
+				<a href="/register">S'enregistrer</a>
+			</li>
+			<li>
+				<a href="/login">Se Connecter</a>
+			</li>
+
+		{% endif %}
+		<li>Réserver</li>
+
+
+		{% if is_granted("ROLE_ADMIN")%}
+			<li>Administration</li>
+		{% elseif is_granted("ROLE_EMPLOYE") %}
+			<li>Employe</li>
+		{% endif %}
+
+	</ul>
+</nav>

@@ -10,6 +10,7 @@ $titleTableColor: #222;
 body {
   background-color: $maincolor;
   justify-items: center;
+  width: 100vw;
 }
 
 a {
@@ -28,7 +29,6 @@ input[type="file"]::file-selector-button {
 }
 
 header {
-  width: 100vh;
   nav {
     ul {
       list-style-type: none;

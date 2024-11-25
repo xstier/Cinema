@@ -18,6 +18,16 @@
 		{% endblock %}
 	</head>
 	<body>
-		{% block body %}{% endblock %}
+		<header>
+			{% block header %}
+
+				{% include '_menu.html.twig' %}
+
+
+			{% endblock %}
+			<header>
+				{% block body %}{% endblock %}
+			</body>
+		</html>
 	</body>
 </html>
