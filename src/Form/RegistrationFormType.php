@@ -17,14 +17,15 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+
 class RegistrationFormType extends AbstractType
 {
-    public function __construct(private Security $security) {}
 
-    public function role()
+
+    public function __construct(private Security $security)
+
     {
-        $user = $this->security->getUser();
-        $role = $this->security->isGranted("ROLE_ADMIN");
+        $this->security = $security;
     }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -63,20 +64,21 @@ class RegistrationFormType extends AbstractType
         $formData = $options['data'];
 
 
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
+            $builder
+                ->add('Roles', ChoiceType::class, [
+                    'choices' =>
+                    [
+                        'Utilisateur' => 'ROLE_USER',
+                        'Admin' => 'ROLE_ADMIN',
+                        'Employe' => 'ROLE_EMPLOYE'
 
-        $builder
-            ->add('Roles', ChoiceType::class, [
-                'choices' =>
-                [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                    'Employe' => 'ROLE_EMPLOYE'
+                    ],
+                    'data' => $formData->getRoles()[0] ?? null, // Pré-sélectionner le premier rôle, ou null si aucun
 
-                ],
-                'data' => $formData->getRoles()[0] ?? null, // Pré-sélectionner le premier rôle, ou null si aucun
-
-            ]);
+                ]);
+        }
 
         $builder
             ->add('pseudo', TextType::class, [
