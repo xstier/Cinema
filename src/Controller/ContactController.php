@@ -31,16 +31,17 @@ class ContactController extends AbstractController
             $text = $data['description'] ?? 'No message provided';
 
             $email = (new Email())
-                ->from('contact@cinephoria.com')
+                ->from('contct@cineforia.com')
                 ->to('contact@cineforia.com')
                 ->subject($subject)
-                ->text($text);
+                ->text($text)
+                ->html("<p>$text</p>");
 
             try {
                 $mailer->send($email);
-                return new Response('Email envoyé');
+                $this->addFlash('success', 'Email envoyé');
             } catch (\Exception $e) {
-                return new Response('Failed to send email: ' . $e->getMessage());
+                $this->addFlash('error', 'Failed to send email: ' . $e->getMessage());
             }
         }
         return $this->render('contact/index.html.twig', [
