@@ -22,6 +22,9 @@
 			<li>Administration</li>
 		{% elseif is_granted("ROLE_EMPLOYE") %}
 			<li>Employe</li>
+		{% elseif is_granted("ROLE_USER") %}
+			<li>Mon espace</li>
+
 		{% endif %}
 
 	</ul>
