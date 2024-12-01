@@ -45,6 +45,11 @@ class Salles
         return $this->id;
     }
 
+    public function getId_Cinema(): ?Cinemas
+    {
+        return $this->id_cinema;
+    }
+
     public function getIdCinema(): ?Cinemas
     {
         return $this->id_cinema;

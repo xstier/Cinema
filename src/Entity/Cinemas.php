@@ -103,7 +103,7 @@ class Cinemas
     {
         if (!$this->salles->contains($salle)) {
             $this->salles->add($salle);
-            $salle->setIdCinema($this);
+            $salle->setId_Cinema($this);
         }
 
         return $this;
@@ -113,8 +113,8 @@ class Cinemas
     {
         if ($this->salles->removeElement($salle)) {
             // set the owning side to null (unless already changed)
-            if ($salle->getIdCinema() === $this) {
-                $salle->setIdCinema(null);
+            if ($salle->getId_Cinema() === $this) {
+                $salle->setId_Cinema(null);
             }
         }
 
