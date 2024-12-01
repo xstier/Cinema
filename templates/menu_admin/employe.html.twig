@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+
+{% block title %}Administration
+{% endblock %}
+{% block body %}
+	{% if is_granted("ROLE_ADMIN") %}
+		<div class="admin">
+			<div>
+				<a href='/films'>Gérer les films</a>
+			</div>
+			<div>
+				<a href='/salles'>Gérer les Salles</a>
+			</div>
+			<div>
+				<a href=>Gérer les avis</a>
+			</div>
+
+		</div>
+
+	{% endif %}
+{% endblock %}
