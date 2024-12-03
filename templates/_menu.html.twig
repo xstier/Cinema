@@ -5,7 +5,9 @@
 		</li>
 		<li>Contact</li>
 		{% if is_granted("ROLE_USER") %}
-			<li>Se Déconnecter</li>
+			<li>
+				<a href="/logout">Se Déconnecter</a>
+			</li>
 		{% else %}
 			<li>
 				<a href="/register">S'enregistrer</a>
