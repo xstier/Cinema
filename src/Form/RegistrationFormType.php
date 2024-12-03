@@ -10,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -22,15 +21,13 @@ class RegistrationFormType extends AbstractType
 {
 
 
-    public function __construct(private Security $security)
-
-    {
-        $this->security = $security;
-    }
+    public function __construct(private Security $security) {}
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'constraints' => [new NotBlank(['message' => 'Renseignez votre email'])]
+            ])
             // ->add('agreeTerms', CheckboxType::class, [
             //     'mapped' => false,
             //     'constraints' => [
@@ -61,21 +58,22 @@ class RegistrationFormType extends AbstractType
 
 
 
-        $formData = $options['data'];
-
-
         if ($this->security->isGranted('ROLE_ADMIN')) {
+            $formData = $options['data'];
 
             $builder
-                ->add('Roles', ChoiceType::class, [
+                ->add('roles', ChoiceType::class, [
+                    'mapped' => false,
                     'choices' =>
                     [
                         'Utilisateur' => 'ROLE_USER',
                         'Admin' => 'ROLE_ADMIN',
-                        'Employe' => 'ROLE_EMPLOYE'
+                        'Employe' => 'ROLE_EMPLOYE',
 
                     ],
-                    'data' => $formData->getRoles()[0] ?? null, // Pré-sélectionner le premier rôle, ou null si aucun
+
+
+                    //'data' => $formData->getRoles()[0] ?? null, // Pré-sélectionner le premier rôle, ou null si aucun
 
                 ]);
         }
